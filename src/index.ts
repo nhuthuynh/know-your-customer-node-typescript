@@ -2,13 +2,14 @@ import 'reflect-metadata';
 import config from 'config';
 import { createExpressServer } from 'routing-controllers';
 import controllers from './controllers/index';
+import LoggingMiddleware from './middlewares/LoggingMiddleware';
 
 const app = createExpressServer({
     defaultErrorHandler: false,
     validation: false,
     routePrefix: '/api',
     controllers,
-    middlewares: []
+    middlewares: [LoggingMiddleware]
 });
 
 const serverInformation = config.get('server');

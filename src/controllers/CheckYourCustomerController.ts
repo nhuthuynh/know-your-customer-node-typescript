@@ -1,6 +1,10 @@
-import { JsonController, Body, Post } from 'routing-controllers';
+import { JsonController, Body, Post, Get } from 'routing-controllers';
 
 @JsonController('customer')
-export class CheckYourCustomerController {
+export default class CheckYourCustomerController {
 
+    @Get()
+    welcome(): string {
+        return 'welcome';
+    }
 }

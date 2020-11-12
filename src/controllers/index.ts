@@ -1,3 +1,3 @@
-import CheckYourCustomerController from './CheckYourCustomerController';
+import CustomerController from './CustomerController';
 
-export default [CheckYourCustomerController];
+export default [CustomerController];

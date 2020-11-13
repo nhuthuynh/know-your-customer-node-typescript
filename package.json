@@ -6,8 +6,8 @@
   "author": "Minh Nhut Huynh",
   "license": "MIT",
   "scripts": {
-    "start:dev": "nodemon",
-    "start": "npm run build && node build/index.js",
+    "start:dev": "cross-env NODE_ENV=dev nodemon",
+    "start": "cross-env NODE_ENV=production npm run build && node build/index.js",
     "build": "rimraf ./build && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

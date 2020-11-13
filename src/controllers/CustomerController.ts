@@ -29,7 +29,7 @@ export default class CustomerController {
         if (result.verificationResultCode && result.verificationResultCode === VerificationResultCode.Yes || result.verificationResultCode === VerificationResultCode.No) {
             return {
                 data: {
-                    kyc: result.verificationResultCode === VerificationResultCode.Yes
+                    kycResult: result.verificationResultCode === VerificationResultCode.Yes
                 }
             };
         } else {

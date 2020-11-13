@@ -1,5 +1,8 @@
-import { JsonController, Get, Post, Body } from 'routing-controllers';
 import fetch from 'node-fetch';
+import config from 'config';
+import { JsonController, Get, Post, Body } from 'routing-controllers';
+import { CustomerDriverLicense, VerificationResultCode, VerificationResultCodeMessage } from '../models/CustomerDriverLicense';
+import { validateLicense } from '../utils/validation';
 
 @JsonController('/customer')
 export default class CustomerController {
@@ -10,26 +13,37 @@ export default class CustomerController {
     }
 
     @Post('/licenses')
-    async checkingLicenses(@Body() customer: any):Promise<any> {
-        const testData = { 
-            "birthDate" : "1985-02-08", 
-            "givenName" : "James", 
-            "middleName" : "Robert", 
-            "familyName" : "Smith", 
-            "licenceNumber" : "94977000", 
-            "stateOfIssue" : "NSW", 
-            "expiryDate" : "2020-01-01" 
-        };
-        const response = await fetch('https://australia-southeast1-reporting-290bc.cloudfunctions.net/driverlicence', {
+    async checkingLicenses(@Body({ required: true }) customerDriverLicense: CustomerDriverLicense):Promise<any> {
+        const errors = await validateLicense(customerDriverLicense);
+        if (errors.length > 0) {
+            return {
+                message: 'Input object is invalid',
+                errors
+            }
+        }
+        const { api_key, endpoint } = config.get('KYC');
+        const response = await fetch(endpoint, {
             headers: {
-                'Authorization': 'Bearer 03aa7ba718da920e0ea362c876505c6df32197940669c5b150711b03650a78cf',
+                'Authorization': `Bearer ${api_key}`,
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify(testData)
+            body: JSON.stringify(customerDriverLicense)
         });
         const result = await response.json();
-        console.log('result', result);
-        return result;
+        if (result.verificationResultCode && result.verificationResultCode === VerificationResultCode.Yes || result.verificationResultCode === VerificationResultCode.No) {
+            return {
+                data: {
+                    kyc: result.verificationResultCode === VerificationResultCode.Yes
+                }
+            };
+        } else {
+            return {
+                message: VerificationResultCodeMessage[result.verificationResultCode],
+                errors: {
+                    code: result.verificationResultCode
+                }
+            };
+        }
     }
 }

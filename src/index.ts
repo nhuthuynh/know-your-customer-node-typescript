@@ -7,6 +7,7 @@ import LoggingMiddleware from './middlewares/LoggingMiddleware';
 const app = createExpressServer({
     defaultErrorHandler: false,
     validation: false,
+    classTransformer: true,
     routePrefix: '/api',
     controllers,
     middlewares: [LoggingMiddleware]

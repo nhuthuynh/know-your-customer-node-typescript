@@ -27,7 +27,10 @@
         },
         "types": [
             "@types/node",
+            "reflect-metadata",
+            "jest"
         ],
+        "typeRoots": ["./node_modules/@types"],
         "lib": [
             "esnext",
             "es6",
@@ -35,7 +38,8 @@
         ],
     },
     "include": [
-        "src/**/*.ts",
+        "./src/**/*.ts",
+        "./src/**/*.test.ts",
     ],
     "exclude": [
         "node_modules",

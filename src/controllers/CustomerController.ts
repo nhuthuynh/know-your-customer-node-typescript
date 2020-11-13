@@ -7,11 +7,6 @@ import { validateLicense } from '../utils/validation';
 @JsonController('/customer')
 export default class CustomerController {
 
-    @Get()
-    welcome(): string {
-        return 'welcome';
-    }
-
     @Post('/licenses')
     async checkingLicenses(@Body({ required: true }) customerDriverLicense: CustomerDriverLicense):Promise<any> {
         const errors = await validateLicense(customerDriverLicense);

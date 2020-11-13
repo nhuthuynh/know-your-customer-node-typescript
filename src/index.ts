@@ -17,3 +17,5 @@ const serverInformation = config.get('server');
 const { host, port } = serverInformation;
 app.listen(port, host);
 console.log(`Server is listening on ${host}:${port}`);
+
+export default app;
